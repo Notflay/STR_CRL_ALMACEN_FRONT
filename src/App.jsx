@@ -1,35 +1,99 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useRef, createContext } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import "../node_modules/primeflex/primeflex.css";
+import "../node_modules/primeicons/primeicons.css";
+import { Toast } from "primereact/toast";
+import Login from "./components/content/Login/Login";
+import Bienvenida from "./components/content/Inicio/Bienvenida";
+import { Componente } from "./components/Componente";
+import BodySL from "./components/content/Req.Interno/BodySL";
 
-function App() {
-  const [count, setCount] = useState(0)
+
+
+export const AppContext = createContext(null);
+
+export default function MyApp() {
+  const [config, setConfig] = useState({});
+  const [usuario, setUsuario] = useState({
+    usuario: "",
+    pass: "",
+  });
+  const toast = useRef(null);
+  const ruta = "/shopping"; // Servidor"/react-project";
+
+  const showError = () => {
+
+
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <AppContext.Provider
+      value={{
+        usuario,
+        setUsuario,
+        showError,
+        config: config[0],
+        ruta,
+      }}
+    >
+      <Toast ref={toast} />
+      <Router>
+        <main>
+          <Routes>
+            <Route path={ruta + "/login"} element={<Login />} />
+            <Route
+              index
+              element={
+                <Componente>
+                  <Bienvenida />{" "}
+                </Componente>
+              }
+            />
+            <Route
+              path={ruta + "/"}
+              element={
+                <Componente>
+                  <Bienvenida />{" "}
+                </Componente>
+              }
+            />
+            <Route
+              path={ruta + "/home"}
+              element={
+                <Componente>
+                  <Bienvenida />{" "}
+                </Componente>
+              }
+            />
+            <Route
+              path={ruta + "/Inicio"}
+              element={
 
-export default App
+                <Componente>
+                  <Bienvenida />{" "}
+                </Componente>
+
+              }
+            />
+            <Route
+              path={ruta + "/ReqInterno"}
+              element={
+                <Componente>
+                  <BodySL />
+                </Componente>
+              }
+            />
+            {/* <Route
+              path={ruta + "/rendiciones"}
+              element={
+                <Componente>
+                  <BodyRD />{" "}
+                </Componente>
+              }
+            /> */}
+          </Routes>
+        </main>
+      </Router>
+    </AppContext.Provider>
+  );
+}
