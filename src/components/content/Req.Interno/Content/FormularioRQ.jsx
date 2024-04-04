@@ -39,6 +39,13 @@ export function FormularioRQ(props) {
     U_ST_CodArea: null,
     U_ST_UserSolRQ: null,
     Estado: { id: "1", name: "Borrador" }, //{  id: null, name: null },
+    Moneda: {
+      Descripcion: null,
+      Id: 0,
+      Nombre: null,
+      id: "SOL",
+      name: "SOL",
+    },
   });
 
   const [detalles, setDetalles] = useState({

@@ -1,5 +1,5 @@
 .layoutImage {
-    background-image: url("/src/components/Public/Imgs/FondoLogin.jpg");
+   /* background-image: url("/src/components/Public/Imgs/FondoLogin.jpg");*/
     height: 100vh;
     width: 100%;
     background-repeat: no-repeat;
@@ -7,6 +7,7 @@
     background-size: 100% 100%;
     justify-content: right !important;
     display: flex;
+    /* background-color: rgb(255, 255, 255); */
 }
 
 /* Consulta de medios para pantallas de celular */
@@ -14,7 +15,7 @@
     .layoutImage {
         justify-content: center !important;
     }
-}
+}   
 
 .fragmentLogin {
     --height: 75%;

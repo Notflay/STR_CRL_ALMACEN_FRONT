@@ -21,6 +21,44 @@ export function DetalleRQ() {
     return formatCurrency(total);
   };
 
+  const selectedOptionTemplate = (option, props) => {
+    if (option) {
+      return (
+        <div className="flex">
+          <div>{option.name}</div>
+        </div>
+      );
+    }
+
+    return <span>{props.name}</span>;
+  };
+
+  const complementoOptionTemplate = (option) => {
+    return (
+      <div className="flex">
+        <div>{option.name}</div>
+      </div>
+    );
+  };
+
+  const monedas = [
+    {
+      Descripcion: null,
+      Id: 0,
+      Nombre: null,
+      id: "SOL",
+      name: "SOL",
+    },
+    {
+      Descripcion: null,
+      Id: 0,
+      Nombre: null,
+      id: "USD",
+      name: "USD",
+    },
+    { Descripcion: null, Id: 0, Nombre: null, id: "EUR", name: "EUR" },
+  ];
+
   const footerGroup = (
     <ColumnGroup>
       <Row>
@@ -36,6 +74,34 @@ export function DetalleRQ() {
 
   return (
     <>
+      <div className="grid">
+        <div className="col-12 md:col-6 lg:col-3">
+          <div className="mb-3 flex flex-column gap-2">
+            <label htmlFor="countries">Moneda</label>
+            <div className="card flex">
+              <Dropdown
+                value={monedas[0]}
+                onChange={
+                  () => {}
+                  //   setDocumento((prevDocumento) => ({
+                  //     ...prevDocumento,
+                  //     STR_MONEDA: e.target.value,
+                  //   }))
+                }
+                options={monedas}
+                optionLabel="name"
+                placeholder="Selecciona Moneda"
+                valueTemplate={selectedOptionTemplate}
+                itemTemplate={complementoOptionTemplate}
+                className="w-full md:w-14rem"
+                //disabled={editable}
+                //disabled={!estadosEditables.includes(solicitudRD.estado)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      fsfs
       <div>
         <div className="card">
           <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>

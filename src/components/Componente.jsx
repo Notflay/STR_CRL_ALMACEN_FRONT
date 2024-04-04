@@ -47,32 +47,6 @@ export function Componente({ children }) {
     return window.innerWidth < 400;
   };
 
-  /* 
-  Por defecto 
-  */
-
-  const selectedOptionTemplate = (option, props) => {
-    if (option) {
-      return (
-        <div className="flex">
-          <div>
-            {option.id} - {option.name}
-          </div>
-        </div>
-      );
-    }
-
-    return <span>{props.placeholder}</span>;
-  };
-
-  const complementoOptionTemplate = (option) => {
-    return (
-      <div className="flex">
-        <div>{option.name}</div>
-      </div>
-    );
-  };
-
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
