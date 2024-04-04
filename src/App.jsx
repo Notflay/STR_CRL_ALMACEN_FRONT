@@ -7,23 +7,65 @@ import Login from "./components/content/Login/Login";
 import Bienvenida from "./components/content/Inicio/Bienvenida";
 import { Componente } from "./components/Componente";
 import BodySL from "./components/content/Req.Interno/BodySL";
-
-
+import { FormularioRQ } from "./components/content/Req.Interno/Content/FormularioRQ";
 
 export const AppContext = createContext(null);
 
 export default function MyApp() {
   const [config, setConfig] = useState({});
   const [usuario, setUsuario] = useState({
-    usuario: "",
-    pass: "",
+    usuarioId: null,
+    nombres: "",
+    apellidos: "",
+    email: "",
+    username: "",
+    password: "",
+    rol: null,
+    filial: null,
   });
   const toast = useRef(null);
-  const ruta = "/shopping"; // Servidor"/react-project";
+  const ruta = "/warehouse"; // Servidor"/react-project";
 
-  const showError = () => {
+  const showError = (detalle) => {
+    toast.current.show({
+      severity: "error",
+      summary: "Error",
+      detail: detalle,
+      life: 3000,
+    });
+  };
 
+  const showSuccess = (detalle) => {
+    toast.current.show({
+      severity: "success",
+      summary: "Exitoso",
+      detail: detalle,
+      life: 3000,
+    });
+  };
 
+  /* 
+  Por defecto 
+  */
+
+  const selectedOptionTemplate = (option, props) => {
+    if (option) {
+      return (
+        <div className="flex">
+          <div>{option.name}</div>
+        </div>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
+  };
+
+  const complementoOptionTemplate = (option) => {
+    return (
+      <div className="flex">
+        <div>{option.id}</div>
+      </div>
+    );
   };
 
   return (
@@ -32,8 +74,11 @@ export default function MyApp() {
         usuario,
         setUsuario,
         showError,
+        showSuccess,
         config: config[0],
         ruta,
+        selectedOptionTemplate,
+        complementoOptionTemplate,
       }}
     >
       <Toast ref={toast} />
@@ -68,11 +113,9 @@ export default function MyApp() {
             <Route
               path={ruta + "/Inicio"}
               element={
-
                 <Componente>
                   <Bienvenida />{" "}
                 </Componente>
-
               }
             />
             <Route
@@ -80,6 +123,14 @@ export default function MyApp() {
               element={
                 <Componente>
                   <BodySL />
+                </Componente>
+              }
+            />
+            <Route
+              path={ruta + "/ReqInterno/agregar"}
+              element={
+                <Componente>
+                  <FormularioRQ />
                 </Componente>
               }
             />

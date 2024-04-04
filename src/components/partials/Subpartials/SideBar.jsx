@@ -6,7 +6,6 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
   const [modulos, setModulos] = useState({
     inicio: true,
     requerimiento: false,
-
   });
   const { ruta } = useContext(AppContext);
   const navigate = useNavigate();
@@ -32,7 +31,6 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
                   setModulos({
                     inicio: true,
                     requerimiento: false,
-
                   });
                   navigate(ruta + "/home");
                   if (responsiveSize) {
@@ -52,7 +50,7 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
             <li className="list-none">
               <a
                 className={`flex align-items-center relative outline-none hover:text-primary-600 cursor-pointer gap-2 pt-3 w-full ${
-                  modulos.ReqInterno? "text-primary-600" : ""
+                  modulos.ReqInterno ? "text-primary-600" : ""
                 }`}
                 style={{
                   padding: ".75rem 1rem",
@@ -71,10 +69,9 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
                 }}
               >
                 <i className="pi pi-pencil"></i>
-                <span>Req.Interno</span>
+                <span>Requerimiento</span>
               </a>
             </li>
-            
           </ul>
         </li>
       </ul>

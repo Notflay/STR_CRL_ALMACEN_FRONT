@@ -1,15 +1,12 @@
-import { Button } from 'primereact/button';
-import React, { useContext, useState } from 'react'
+import { Button } from "primereact/button";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../../../App";
 import { Divider } from "primereact/divider";
-import { useNavigate } from 'react-router-dom';
-import HeaderSL from './HeaderSL';
-import Requerimiento from './Requerimiento';
-
-
+import { useNavigate } from "react-router-dom";
+import HeaderSL from "./HeaderSL";
+import Requerimiento from "./Requerimiento";
 
 function BodySL({ responsiveSizeMobile }) {
-
   const [estados, setEstados] = useState([]);
   const [requerimiento, setRequerimiento] = useState([]);
   const { usuario, ruta } = useContext(AppContext);
@@ -79,10 +76,11 @@ function BodySL({ responsiveSizeMobile }) {
     <>
       <div className="flex justify-content-between flex-wrap">
         <div
-          className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
-            } align-items-center`}
-
-        >Lista de Requerimientos
+          className={`flex ${
+            responsiveSizeMobile ? `text-xl` : `text-2xl`
+          } align-items-center`}
+        >
+          Lista de Requerimientos
         </div>
         <div div className="flex flex-row flex-wrap gap-2">
           <Button
@@ -109,21 +107,20 @@ function BodySL({ responsiveSizeMobile }) {
             label="Agregar"
             icon="pi pi-plus"
             severity="success"
-            // onClick={() => {
-            //     navigate(ruta + "/solicitudes/agregar");
-            // }}
-            disabled={usuario.TipoUsuario != 1}
+            onClick={() => {
+              navigate(ruta + "/reqInterno/agregar");
+            }}
+            disabled={usuario.rol?.id != 1}
           />
           <Button
             label="Exportar"
             icon="pi pi-upload"
             severity="secondary"
             style={{ backgroundColor: "black" }}
-          // onClick={() => {
-          //     exportExcel();
-          // }}
+            // onClick={() => {
+            //     exportExcel();
+            // }}
           />
-
         </div>
       </div>
       <Divider />
@@ -158,8 +155,6 @@ function BodySL({ responsiveSizeMobile }) {
       </div>
     </>
   );
-
-
 }
 
-export default BodySL
+export default BodySL;

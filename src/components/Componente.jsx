@@ -1,17 +1,39 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import Header from "./partials/Header";
 import Modulos from "./partials/Subpartials/Modulos";
 import Layout from "./partials/Subpartials/Layout";
-
-
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../App";
+import { Toast } from "primereact/toast";
 
 export function Componente({ children }) {
-  const [ setWindowWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
+  const [setWindowWidth] = useState(window.innerWidth);
+  const toast = useRef(null);
+  const { /* usuario, showError, */ ruta, usuario } = useContext(AppContext);
   // const { usuario, showError, ruta } = useContext(AppContext);
   const [SideBarActive, setSideBarActive] = useState(true);
   // const navigate = useNavigate();
 
+  /*
+  const showSuccess = (detalle) => {
+    toast.current.show({
+      severity: "success",
+      summary: "Exitoso",
+      detail: detalle,
+      life: 3000,
+    });
+  };
+
+  const showError = (detalle) => {
+    toast.current.show({
+      severity: "error",
+      summary: "Error",
+      detail: detalle,
+      life: 3000,
+    });
+  };
+  */
   const handleResize = () => {
     setWindowWidth(window.innerWidth);
     //setSideBarActive(window.innerWidth >= 992);
@@ -25,6 +47,32 @@ export function Componente({ children }) {
     return window.innerWidth < 400;
   };
 
+  /* 
+  Por defecto 
+  */
+
+  const selectedOptionTemplate = (option, props) => {
+    if (option) {
+      return (
+        <div className="flex">
+          <div>
+            {option.id} - {option.name}
+          </div>
+        </div>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
+  };
+
+  const complementoOptionTemplate = (option) => {
+    return (
+      <div className="flex">
+        <div>{option.name}</div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
@@ -32,17 +80,23 @@ export function Componente({ children }) {
     };
   }, []);
 
-
-
-
+  useEffect(() => {
+    if ((usuario == null) | (usuario?.usuarioId == null)) {
+      navigate(ruta + "/login", { replace: true });
+    } else {
+      console.log(usuario);
+    }
+  }, []);
 
   return (
     <>
+      <Toast ref={toast} />
       <Header
         setSideBarActive={setSideBarActive}
         SideBarActive={SideBarActive}
         responsiveSize={responsiveSize()}
         responsiveSizeMobile={responsiveSizeMobile()}
+        usuario={usuario}
       />
       <Modulos
         responsiveSize={responsiveSize()}
