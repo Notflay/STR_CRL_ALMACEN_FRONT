@@ -16,7 +16,11 @@ export function DetalleFrm({
   const [selectedDetalles, setSelectedDetalles] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [productDialog, setProductDialog] = useState(false);
+  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
 
+  // Crear ALMACEN
+  let emptyProduct = {};
+  //
   const footerGroup = (
     <ColumnGroup>
       <Row>
