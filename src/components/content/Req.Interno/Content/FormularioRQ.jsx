@@ -1,14 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import { Dropdown } from "primereact/dropdown";
-import { Calendar } from "primereact/calendar";
 import { AppContext } from "../../../../App";
-import { InputText } from "primereact/inputtext";
 import { ObtenerEstados } from "../../../../services/axios.service";
 import { HeaderFrm } from "./subcontent/HeaderFrm";
 import { GeneralFrm } from "./subcontent/GeneralFrm";
 import { Divider } from "primereact/divider";
-import { AnexoFrm } from "./subcontent/AnexoFrm";
 import { DetalleFrm } from "./subcontent/DetalleFrm";
 
 export function FormularioRQ(props) {
