@@ -77,6 +77,7 @@ export default function Formulario() {
                     buttonRef.current.click();
                   }
                 }}
+                tabIndex={1}
                 // value={usuario?.usuario || ""}
               />
             </div>
@@ -92,6 +93,9 @@ export default function Formulario() {
                     password: e.target.value,
                   }))
                 }
+                feedback={false}
+                tabIndex={2}
+                onkey
                 onKeyDown={(e) => {
                   if (e.code === "Enter") {
                     buttonRef.current.click();
@@ -109,7 +113,11 @@ export default function Formulario() {
               />
             </div>
             <div className="flex my-1">
-              <Button className="w-full" label="Olvido la contraseñas" />
+              <Button
+                className="w-full"
+                label="Olvido la contraseñas"
+                tabIndex={4}
+              />
             </div>
           </div>
           <div className="flex justify-content-center">
@@ -118,8 +126,10 @@ export default function Formulario() {
               severity="success"
               rounded
               size="large"
+              event
               className="w-2/3"
               onClick={handleLogin}
+              tabIndex={5}
               // onClick={(e)=>{
               //     e.preventDefault();
               //     obtieneSesion();

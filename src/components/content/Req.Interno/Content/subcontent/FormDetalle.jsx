@@ -5,7 +5,7 @@ import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 
-export function FormDetalle(props) {
+export function FormDetalle({ setProductDialog, setDetalle, setSubmitted }) {
   const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
 
   const hideDialog = () => {

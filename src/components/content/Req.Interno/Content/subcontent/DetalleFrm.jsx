@@ -6,12 +6,14 @@ import { Row } from "primereact/row";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Dropdown } from "primereact/dropdown";
+import { FormDetalle } from "./FormDetalle";
 
 export function DetalleFrm({
   detalles,
   setDetalles,
   setRequerimiento,
   requerimiento,
+  usuario,
 }) {
   const [selectedDetalles, setSelectedDetalles] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -19,7 +21,13 @@ export function DetalleFrm({
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
 
   // Crear ALMACEN
-  let emptyProduct = {};
+  let emptyProduct = {
+    item: { id: null, name: null },
+    almacen: usuario?.filial, // Obtiene automatico de la Filial
+  };
+  //
+  const [detalle, setDetalle] = useState(emptyProduct);
+
   //
   const footerGroup = (
     <ColumnGroup>
@@ -169,6 +177,11 @@ export function DetalleFrm({
           <Column field="STR_CUP.U_CUP" header="Unidad de Negocio"></Column>
         </DataTable>
       </div>
+      <FormDetalle
+        setProductDialog={setProductDialog}
+        setSubmitted={setSubmitted}
+        setDetalle={setDetalle}
+      />
     </>
   );
 }
