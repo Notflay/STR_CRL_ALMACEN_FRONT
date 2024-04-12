@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Toolbar } from "primereact/toolbar";
 import { Column } from "primereact/column";
 import { ColumnGroup } from "primereact/columngroup";
@@ -14,6 +14,16 @@ export function DetalleFrm({
   setRequerimiento,
   requerimiento,
   usuario,
+  setLoading,
+  items,
+  dim1,
+  dim2,
+  dim4,
+  dim5,
+  selectedOptionTemplate,
+  complementoOptionTemplate,
+  showSuccess,
+  showError,
 }) {
   const [selectedDetalles, setSelectedDetalles] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -22,11 +32,85 @@ export function DetalleFrm({
 
   // Crear ALMACEN
   let emptyProduct = {
-    item: { id: null, name: null },
-    almacen: usuario?.filial, // Obtiene automatico de la Filial
+    STR_ITEM: {
+      ItemCode: null,
+      ItemName: null,
+      U_BPP_TIPUNMED: null,
+      WhsCode: null,
+    },
+    //STR_ALMACEN: null, // Obtiene automatico de la Filial
+    STR_STOCK: 0,
+    STR_CANTIDAD: 0,
+    STR_COSTO: 0,
+    STR_SUBTOTAL: 0,
+    STR_FECHAREQ: new Date(),
+    STR_DIM1: { id: null, name: null },
+    STR_DIM2: { id: null, name: null },
+    STR_DIM3: { id: null, name: null },
+    STR_DIM4: { id: null, name: null },
+    STR_DIM5: { id: null, name: null },
+    STR_COMENTARIO: null,
   };
   //
+
+  const fecBodyTemplate = (rowData) => {
+    // const memoizedFecha = useMemo(() => {
+    //   const parts = rowData.STR_FECHAREQ.split(" ");
+    //   const dateParts = parts[0].split("/");
+    //   const timeParts = parts[1].split(":");
+    //   return new Date(
+    //     parseInt(dateParts[2], 10),
+    //     parseInt(dateParts[1], 10) - 1,
+    //     parseInt(dateParts[0], 10),
+    //     parseInt(timeParts[0], 10),
+    //     parseInt(timeParts[1], 10),
+    //     parseInt(timeParts[2], 10)
+    //   );
+    // }, [rowData.STR_FECHAREQ]);
+
+    return <>{rowData.STR_FECHAREQ.toISOString().split("T")[0]}</>;
+  };
+
   const [detalle, setDetalle] = useState(emptyProduct);
+
+  const editDetalle = (detalle) => {
+    setDetalle(detalle);
+    setProductDialog(true);
+  };
+
+  const confirmDeleteDetalle = (detalle) => {
+    setDetalle(detalle);
+    setDeleteProductDialog(true);
+  };
+
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <React.Fragment>
+        <Button
+          icon="pi pi-pencil"
+          rounded
+          outlined
+          className="mr-2"
+          onClick={() => editDetalle(rowData)}
+          // disabled={
+          //   (usuario.TipoUsuario != 1) |
+          //   !estadosEditables.includes(solicitudRD.estado)
+          // }
+        />
+        <Button
+          icon="pi pi-trash"
+          rounded
+          outlined
+          severity="danger"
+          onClick={() => confirmDeleteDetalle(rowData)}
+          // disabled={
+          //   (usuario.TipoUsuario != 1) |
+          //   !estadosEditables.includes(solicitudRD.estado)
+          // }
+        />
+      </React.Fragment>
+    );
+  };
 
   //
   const footerGroup = (
@@ -42,43 +126,24 @@ export function DetalleFrm({
     </ColumnGroup>
   );
 
-  const selectedOptionTemplate = (option, props) => {
-    if (option) {
-      return (
-        <div className="flex">
-          <div>{option.name}</div>
-        </div>
-      );
-    }
-
-    return <span>{props.name}</span>;
-  };
-
-  const complementoOptionTemplate = (option) => {
-    return (
-      <div className="flex">
-        <div>{option.name}</div>
-      </div>
-    );
-  };
-
   const monedas = [
     {
-      Descripcion: null,
-      Id: 0,
-      Nombre: null,
       id: "SOL",
       name: "SOL",
     },
     {
-      Descripcion: null,
-      Id: 0,
-      Nombre: null,
       id: "USD",
       name: "USD",
     },
-    { Descripcion: null, Id: 0, Nombre: null, id: "EUR", name: "EUR" },
+    { id: "EUR", name: "EUR" },
   ];
+
+  const openNew = () => {
+    setDetalle(emptyProduct);
+    //obtenerCentroCostoLocal();
+    setSubmitted(false);
+    setProductDialog(true);
+  };
 
   const leftToolbarTemplate = () => {
     return (
@@ -87,7 +152,7 @@ export function DetalleFrm({
           label="Agregar"
           icon="pi pi-plus"
           severity="success"
-          // onClick={openNew}
+          onClick={openNew}
           //disabled={editable}
           // disabled={
           //   solicitudRD.ordenDeViaje |
@@ -128,8 +193,8 @@ export function DetalleFrm({
                 options={monedas}
                 optionLabel="name"
                 placeholder="Selecciona Moneda"
-                valueTemplate={selectedOptionTemplate}
-                itemTemplate={complementoOptionTemplate}
+                valueTemplate={(e) => selectedOptionTemplate(e, false)}
+                itemTemplate={(e) => complementoOptionTemplate(e, false)}
                 className="w-full md:w-14rem"
                 //disabled={editable}
                 //disabled={!estadosEditables.includes(solicitudRD.estado)}
@@ -142,6 +207,7 @@ export function DetalleFrm({
         <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
         <DataTable
           //value={}
+          value={detalles}
           tableStyle={{ minWidth: "50rem" }}
           sortMode="single"
           selection={selectedDetalles}
@@ -154,33 +220,63 @@ export function DetalleFrm({
             headerStyle={{ width: "3rem" }}
             body={(data, options) => options.rowIndex + 1}
           ></Column>
-          <Column field="STR_CODARTICULO.id" header="Cod. Producto"></Column>
-          <Column field="STR_CODARTICULO.name" header="Descripción"></Column>
+          <Column field="STR_ITEM.ItemCode" header="Cod. Producto"></Column>
+          <Column field="STR_ITEM.ItemName" header="Descripción"></Column>
           <Column
-            field="STR_SUBTOTAL"
+            field="STR_ITEM.WhsCode"
             header="Almacen"
             // sortable
             //  body={priceBodyTemplate}
           ></Column>
           <Column
-            field="STR_INDIC_IMPUESTO.id"
+            field="STR_ITEM.Stock"
             header="Stock"
             //body={centCostoTemplate}
           ></Column>
-          <Column field="STR_PROYECTO.id" header="Cantidad"></Column>
-          <Column field="STR_CENTCOSTO.CostCenter" header="Costo"></Column>
+          <Column field="STR_ITEM.Precio" header="Costo"></Column>
+          <Column field="STR_CANTIDAD" header="Cantidad"></Column>
+          <Column field="STR_SUBTOTAL" header="SubTotal"></Column>
           <Column
-            field="STR_CODARTICULO.posFinanciera"
-            header="SubTotal"
+            field="STR_FECHAREQ"
+            body={fecBodyTemplate}
+            header="Fecha Requerida"
           ></Column>
-          <Column field="STR_CUP.U_CUP" header="Fecha Requerida"></Column>
-          <Column field="STR_CUP.U_CUP" header="Unidad de Negocio"></Column>
+          <Column field="STR_DIM1.name" header="Unidad de Negocio"></Column>
+          <Column field="STR_DIM2.name" header="Filial"></Column>
+          <Column field="STR_DIM4.name" header="Área"></Column>
+          <Column field="STR_DIM5.name" header="Centro de Costo"></Column>
+          <Column field="STR_COMENTARIO" header="Comentario"></Column>
+          <Column
+            header="Acciones"
+            body={actionBodyTemplate}
+            exportable={false}
+            style={{ minWidth: "12rem" }}
+          ></Column>{" "}
         </DataTable>
       </div>
       <FormDetalle
+        moneda={requerimiento.Moneda.name}
+        setRequerimiento={setRequerimiento}
         setProductDialog={setProductDialog}
         setSubmitted={setSubmitted}
+        emptyProduct={emptyProduct}
+        detalles={detalles}
+        setDetalles={setDetalles}
+        detalle={detalle}
         setDetalle={setDetalle}
+        setDeleteProductDialog={setDeleteProductDialog}
+        setLoading={setLoading}
+        productDialog={productDialog}
+        items={items}
+        dim1={dim1}
+        dim2={dim2}
+        dim4={dim4}
+        dim5={dim5}
+        selectedOptionTemplate={selectedOptionTemplate}
+        complementoOptionTemplate={complementoOptionTemplate}
+        showSuccess={showSuccess}
+        showError={showError}
+        usuario={usuario}
       />
     </>
   );

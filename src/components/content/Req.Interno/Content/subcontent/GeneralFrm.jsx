@@ -27,6 +27,7 @@ export function GeneralFrm({
                 }));
               }}
               //disabled
+              locale="es"
               dateFormat="dd/mm/yy"
               //  disabled={editable}
               // minDate={getFechaLargo(fechaSolicitud)}
@@ -47,6 +48,7 @@ export function GeneralFrm({
               }}
               //disabled
               dateFormat="dd/mm/yy"
+              locale="es"
               //  disabled={editable}
               // minDate={getFechaLargo(fechaSolicitud)}
             />

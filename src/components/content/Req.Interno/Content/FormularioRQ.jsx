@@ -1,7 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 
 import { AppContext } from "../../../../App";
-import { ObtenerEstados } from "../../../../services/axios.service";
+import {
+  ObtenerDimensiones,
+  ObtenerEstados,
+  ObtenerItems,
+} from "../../../../services/axios.service";
 import { HeaderFrm } from "./subcontent/HeaderFrm";
 import { GeneralFrm } from "./subcontent/GeneralFrm";
 import { Divider } from "primereact/divider";
@@ -23,9 +27,9 @@ export function FormularioRQ(props) {
   const [requerimiento, setRequerimiento] = useState({
     Series: null,
     CardCode: null,
-    DocDate: null,
+    DocDate: new Date(),
     TaxDate: null,
-    DocDueDate: null,
+    DocDueDate: new Date(),
     JournalMemo: null,
     Comments: null,
     SalesPersonCode: null,
@@ -36,29 +40,28 @@ export function FormularioRQ(props) {
     U_ST_UserSolRQ: null,
     Estado: { id: "1", name: "Borrador" }, //{  id: null, name: null },
     Moneda: {
-      Descripcion: null,
-      Id: 0,
-      Nombre: null,
       id: "SOL",
       name: "SOL",
     },
+    STR_TOTALDOC: 0.0,
   });
 
-  const [detalles, setDetalles] = useState({
-    ItemCode: null,
-    Quantity: null,
-    Price: null,
-    WarehouseCode: null,
-    COGSCostingCode: null,
-    COGSCostingCode2: null,
-    COGSCostingCode3: null,
-    COGSCostingCode4: null,
-    COGSCostingCode5: null,
-    Project: null,
-    U_ST_Comentario: null,
-    U_ST_NroRQ: null,
-    U_ST_UserSolRQ: null,
-  });
+  const [detalles, setDetalles] = useState([]);
+  // const [detalles, setDetalles] = useState({
+  //   ItemCode: null,
+  //   Quantity: null,
+  //   Price: null,
+  //   WarehouseCode: null,
+  //   COGSCostingCode: null,
+  //   COGSCostingCode2: null,
+  //   COGSCostingCode3: null,
+  //   COGSCostingCode4: null,
+  //   COGSCostingCode5: null,
+  //   Project: null,
+  //   U_ST_Comentario: null,
+  //   U_ST_NroRQ: null,
+  //   U_ST_UserSolRQ: null,
+  // });
 
   function downloadAndOpenPdf() {}
 
@@ -66,7 +69,14 @@ export function FormularioRQ(props) {
     //setLoadingTemplate(true);
     //setLoadingTemplate(true);
     try {
-      const responses = await Promise.all([ObtenerEstados()]);
+      const responses = await Promise.all([
+        ObtenerEstados(),
+        ObtenerItems("art", usuario.filial.U_ST_Filial),
+        ObtenerDimensiones(1), // Unidad de Negocio
+        ObtenerDimensiones(2), // Filial
+        ObtenerDimensiones(4), // AREA
+        ObtenerDimensiones(5), // Centro de Costo
+      ]);
 
       responses.forEach((response, index) => {
         const { CodRespuesta, DescRespuesta, Result } = response.data;
@@ -76,9 +86,22 @@ export function FormularioRQ(props) {
             case 0:
               setEstados(Result);
               break;
-            /*case 1:
-              setCentroCosto(Result);
+            case 1:
+              setItems(Result);
               break;
+            case 2:
+              setDim1(Result);
+              break;
+            case 3:
+              setDim2(Result);
+              break;
+            case 4:
+              setDim4(Result);
+              break;
+            case 5:
+              setDim5(Result);
+              break;
+            /*
             case 2:
               setProveedores(Result);
               break;
@@ -108,6 +131,14 @@ export function FormularioRQ(props) {
     }
   }
 
+  /* useStates a utilizar para el fomulario */
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [dim1, setDim1] = useState([]);
+  const [dim2, setDim2] = useState([]);
+  const [dim4, setDim4] = useState([]);
+  const [dim5, setDim5] = useState([]);
+
   useEffect(() => {
     // Carga ComboBoxs
     SetDropDowns();
@@ -136,6 +167,16 @@ export function FormularioRQ(props) {
         requerimiento={requerimiento}
         setRequerimiento={setRequerimiento}
         estados={estados}
+        setLoading={setLoading}
+        items={items}
+        dim1={dim1}
+        dim2={dim2}
+        dim4={dim4}
+        dim5={dim5}
+        selectedOptionTemplate={selectedOptionTemplate}
+        complementoOptionTemplate={complementoOptionTemplate}
+        showSuccess={showSuccess}
+        showError={showError}
       />
     </>
   );

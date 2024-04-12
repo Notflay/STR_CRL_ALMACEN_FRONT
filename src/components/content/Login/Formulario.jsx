@@ -126,7 +126,6 @@ export default function Formulario() {
               severity="success"
               rounded
               size="large"
-              event
               className="w-2/3"
               onClick={handleLogin}
               tabIndex={5}
