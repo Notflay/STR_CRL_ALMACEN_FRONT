@@ -1,7 +1,10 @@
 import React from "react";
 import { Divider } from "primereact/divider";
+import { useNavigate } from "react-router-dom";
 
 export function HeaderFrm({ esModoRegistrar, downloadAndOpenPdf, ruta }) {
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className="flex  flex-wrap gap-2">
@@ -9,7 +12,7 @@ export function HeaderFrm({ esModoRegistrar, downloadAndOpenPdf, ruta }) {
           <i
             className="pi pi-chevron-left cursor-pointer"
             onClick={() => {
-              navigate(ruta + "/solicitudes");
+              navigate(ruta + `/reqInterno`);
             }}
           ></i>
           <div>Requerimiento Interno</div>

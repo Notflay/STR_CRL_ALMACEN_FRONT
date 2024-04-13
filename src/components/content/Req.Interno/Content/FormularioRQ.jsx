@@ -10,9 +10,14 @@ import { HeaderFrm } from "./subcontent/HeaderFrm";
 import { GeneralFrm } from "./subcontent/GeneralFrm";
 import { Divider } from "primereact/divider";
 import { DetalleFrm } from "./subcontent/DetalleFrm";
+import { Button } from "primereact/button";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function FormularioRQ(props) {
   const esModoRegistrar = location.pathname.includes("agregar");
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [estados, setEstados] = useState([]);
   const {
     ruta,
@@ -178,6 +183,32 @@ export function FormularioRQ(props) {
         showSuccess={showSuccess}
         showError={showError}
       />
+      <Divider />
+      <div className="card flex flex-wrap  gap-3 mx-3">
+        <Button
+          label={`${id != null ? "Actualizar" : "Guardar"} Borrador`}
+          severity="info"
+          size="large"
+          style={{ backgroundColor: "black", borderColor: "black" }}
+          onClick={(e) => {
+            console.log({ ...requerimiento, detalles });
+            /*
+            setSolicitando(false);
+            registrarSR();*/
+            // if (esModoRegistrar) {
+            //   navigate("/solicitudes");
+            // }
+          }}
+          loading={loading}
+          //disabled={!estadosEditables.includes(solicitudRD.estado)}
+        />
+        <Button
+          label="Cancelar"
+          severity="secondary"
+          size="large"
+          onClick={() => navigate(ruta + `/reqInterno`)}
+        />
+      </div>
     </>
   );
 }

@@ -191,7 +191,8 @@ export function FormDetalle({
       return (
         <div className="flex">
           <div>
-            {option.ItemCode} - {option.ItemName} - {option.U_BPP_TIPUNMED}
+            {option.ItemName}
+            {/* {option.ItemCode} - {option.ItemName} - {option.U_BPP_TIPUNMED} */}
           </div>
         </div>
       );
@@ -221,31 +222,57 @@ export function FormDetalle({
         footer={productDialogFooter}
         onHide={hideDialog}
       >
-        <div className="field">
-          <label htmlFor="name" className="font-bold">
-            Árticulo
-          </label>
-          <div className="card flex">
-            <Dropdown
-              value={detalle.STR_ITEM}
-              onChange={(e) => {
-                setDetalle((prevDetalle) => ({
-                  ...prevDetalle,
-                  STR_ITEM: e.target.value,
-                }));
-                //validaIgualdadEnDetalle(e.target.value);
-              }}
-              options={items}
-              optionLabel="ItemName"
-              placeholder="Articulo"
-              filter
-              filterBy="ItemCode,ItemName"
-              valueTemplate={selectedOptionTemplateItem}
-              itemTemplate={complementoOptionTemplateItem}
-              className="w-full md:w-14rem"
-              //disabled={editable}
-              //disabled={!estadosEditables.includes(estado)}
-            />
+        <div className="flex gap-2">
+          <div className="field">
+            <label htmlFor="name" className="font-bold">
+              Árticulo
+            </label>
+            <div className="card flex">
+              <Dropdown
+                value={detalle.STR_ITEM}
+                onChange={(e) => {
+                  setDetalle((prevDetalle) => ({
+                    ...prevDetalle,
+                    STR_ITEM: e.target.value,
+                  }));
+                  //validaIgualdadEnDetalle(e.target.value);
+                }}
+                options={items}
+                optionLabel="ItemName"
+                placeholder="Articulo"
+                filter
+                filterBy="ItemCode,ItemName"
+                valueTemplate={selectedOptionTemplateItem}
+                itemTemplate={complementoOptionTemplateItem}
+                className="w-full md:w-14rem"
+                //disabled={editable}
+                //disabled={!estadosEditables.includes(estado)}
+              />
+            </div>
+          </div>
+          <div className="field">
+            <label htmlFor="name" className="font-bold">
+              Stock
+            </label>
+            <div className="card flex">
+              <InputText
+                id="pnum"
+                value={detalle.STR_ITEM.Stock}
+                // onChange={(e) =>
+                //   setDetalle((prevDetalle) => ({
+                //     ...prevDetalle,
+                //     STR_CANTIDAD: e.target.value,
+                //     STR_SUBTOTAL: e.target.value * detalle.STR_ITEM?.Precio,
+                //   }))
+                // }
+                useGrouping={false}
+                disabled
+                keyfilter="pnum"
+                // disabled={
+                //   !estadosEditables.includes(estado) | (usuario.TipoUsuario != 1)
+                // }
+              />
+            </div>
           </div>
         </div>
         <div className="field">
@@ -260,7 +287,7 @@ export function FormDetalle({
                 setDetalle((prevDetalle) => ({
                   ...prevDetalle,
                   STR_CANTIDAD: e.target.value,
-                  STR_SUBTOTAL: e.target.value * detalle.STR_COSTO,
+                  STR_SUBTOTAL: e.target.value * detalle.STR_ITEM?.Precio,
                 }))
               }
               useGrouping={false}
@@ -278,14 +305,15 @@ export function FormDetalle({
           <div className="card flex">
             <InputNumber
               inputId="currency-us"
-              value={detalle.STR_COSTO}
-              onValueChange={(e) =>
-                setDetalle((prevDetalle) => ({
-                  ...prevDetalle,
-                  STR_COSTO: e.target.value,
-                  STR_SUBTOTAL: e.target.value * detalle.STR_CANTIDAD,
-                }))
-              }
+              value={detalle.STR_ITEM?.Precio}
+              // onValueChange={(e) =>
+              //   setDetalle((prevDetalle) => ({
+              //     ...prevDetalle,
+              //     STR_COSTO: e.target.value,
+              //     STR_SUBTOTAL: e.target.value * detalle.STR_CANTIDAD,
+              //   }))
+              // }
+              disabled
               // disabled={editable}
               mode="currency"
               currency={`${moneda}`}
@@ -341,6 +369,7 @@ export function FormDetalle({
                 }))
               }
               dateFormat="dd/mm/yy"
+              locale="es"
             />
           </div>
           {/* {submitted && detalle.precioUnitario == null && (

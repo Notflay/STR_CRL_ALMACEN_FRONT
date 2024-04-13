@@ -30,6 +30,17 @@ export function DetalleFrm({
   const [productDialog, setProductDialog] = useState(false);
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
 
+  // Obtiene Totales
+  const totalColumns = () => {
+    let total = 0;
+
+    for (let sale of detalles) {
+      total += sale.STR_SUBTOTAL;
+    }
+
+    return formatCurrency(total);
+  };
+
   // Crear ALMACEN
   let emptyProduct = {
     STR_ITEM: {
@@ -39,9 +50,9 @@ export function DetalleFrm({
       WhsCode: null,
     },
     //STR_ALMACEN: null, // Obtiene automatico de la Filial
-    STR_STOCK: 0,
+    //STR_STOCK: 0,
     STR_CANTIDAD: 0,
-    STR_COSTO: 0,
+    //STR_COSTO: 0,
     STR_SUBTOTAL: 0,
     STR_FECHAREQ: new Date(),
     STR_DIM1: { id: null, name: null },
@@ -69,6 +80,27 @@ export function DetalleFrm({
     // }, [rowData.STR_FECHAREQ]);
 
     return <>{rowData.STR_FECHAREQ.toISOString().split("T")[0]}</>;
+  };
+
+  const formatCurrency = (value) => {
+    let modeloCurrency =
+      requerimiento.Moneda.name == "SOL"
+        ? "en-PE"
+        : requerimiento.Moneda.name == "EUR"
+        ? "de-DE"
+        : "en-US";
+    return value.toLocaleString(modeloCurrency, {
+      style: "currency",
+      currency: requerimiento.Moneda.name,
+    });
+  };
+
+  const priceBodyTemplate = (rowData) => {
+    return formatCurrency(rowData.STR_ITEM.Precio);
+  };
+
+  const priceBodyTemplateTotal = (rowData) => {
+    return formatCurrency(rowData.STR_SUBTOTAL);
   };
 
   const [detalle, setDetalle] = useState(emptyProduct);
@@ -121,7 +153,7 @@ export function DetalleFrm({
           colSpan={3}
           footerStyle={{ textAlign: "right" }}
         />
-        <Column footer={0} />
+        <Column footer={totalColumns} />
       </Row>
     </ColumnGroup>
   );
@@ -233,9 +265,18 @@ export function DetalleFrm({
             header="Stock"
             //body={centCostoTemplate}
           ></Column>
-          <Column field="STR_ITEM.Precio" header="Costo"></Column>
+          <Column
+            field="STR_ITEM.Precio"
+            header="Costo"
+            body={priceBodyTemplate}
+          ></Column>
           <Column field="STR_CANTIDAD" header="Cantidad"></Column>
-          <Column field="STR_SUBTOTAL" header="SubTotal"></Column>
+          <Column
+            field="STR_SUBTOTAL"
+            header="SubTotal"
+            sortable
+            body={priceBodyTemplateTotal}
+          ></Column>
           <Column
             field="STR_FECHAREQ"
             body={fecBodyTemplate}
@@ -272,6 +313,7 @@ export function DetalleFrm({
         dim2={dim2}
         dim4={dim4}
         dim5={dim5}
+        deleteProductDialog={deleteProductDialog}
         selectedOptionTemplate={selectedOptionTemplate}
         complementoOptionTemplate={complementoOptionTemplate}
         showSuccess={showSuccess}
