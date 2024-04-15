@@ -30,21 +30,15 @@ export function FormularioRQ(props) {
   } = useContext(AppContext);
 
   const [requerimiento, setRequerimiento] = useState({
-    Series: null,
-    CardCode: null,
-    DocDate: new Date(),
-    TaxDate: null,
-    DocDueDate: new Date(),
-    JournalMemo: null,
-    Comments: null,
-    SalesPersonCode: null,
-    DocType: null,
-    U_ST_CeCoFilial: null,
-    U_ST_NombreFilial: null,
-    U_ST_CodArea: null,
-    U_ST_UserSolRQ: null,
-    Estado: { id: "1", name: "Borrador" }, //{  id: null, name: null },
-    Moneda: {
+    STR_FEC_REGISTRO: new Date(),
+    STR_FEC_REQUER: new Date(),
+    STR_USUARIO: {
+      id: usuario.sapID,
+      name: usuario.nombres + usuario.apellidos,
+    },
+    STR_FILIAL: usuario.filial,
+    STR_ESTADO: { id: "1", name: "Borrador" }, //{  id: null, name: null },
+    STR_MONEDA: {
       id: "SOL",
       name: "SOL",
     },

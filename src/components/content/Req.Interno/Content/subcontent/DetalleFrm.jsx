@@ -84,14 +84,14 @@ export function DetalleFrm({
 
   const formatCurrency = (value) => {
     let modeloCurrency =
-      requerimiento.Moneda.name == "SOL"
+      requerimiento.STR_MONEDA.name == "SOL"
         ? "en-PE"
-        : requerimiento.Moneda.name == "EUR"
+        : requerimiento.STR_MONEDA.name == "EUR"
         ? "de-DE"
         : "en-US";
     return value.toLocaleString(modeloCurrency, {
       style: "currency",
-      currency: requerimiento.Moneda.name,
+      currency: requerimiento.STR_MONEDA.name,
     });
   };
 
@@ -209,12 +209,12 @@ export function DetalleFrm({
             <label htmlFor="countries">Moneda</label>
             <div className="card flex">
               <Dropdown
-                value={requerimiento.Moneda}
+                value={requerimiento.STR_MONEDA}
                 onChange={
                   (e) => {
                     setRequerimiento((prevRequerimiento) => ({
                       ...prevRequerimiento,
-                      Moneda: e.target.value,
+                      STR_MONEDA: e.target.value,
                     }));
                   }
                   //   setDocumento((prevDocumento) => ({
@@ -296,7 +296,7 @@ export function DetalleFrm({
         </DataTable>
       </div>
       <FormDetalle
-        moneda={requerimiento.Moneda.name}
+        moneda={requerimiento.STR_MONEDA.name}
         setRequerimiento={setRequerimiento}
         setProductDialog={setProductDialog}
         setSubmitted={setSubmitted}

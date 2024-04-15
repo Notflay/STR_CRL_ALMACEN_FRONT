@@ -18,12 +18,12 @@ export function GeneralFrm({
           <div className="mb-3 flex flex-column gap-2">
             <label htmlFor="countries">Fecha de Registro</label>
             <Calendar
-              value={requerimiento.DocDate}
+              value={requerimiento.STR_FEC_REGISTRO}
               readOnlyInput
               onChange={(e) => {
                 setRequerimiento((prevRequerimiento) => ({
                   ...requerimiento,
-                  DocDate: e.target.value,
+                  STR_FEC_REGISTRO: e.target.value,
                 }));
               }}
               //disabled
@@ -38,12 +38,12 @@ export function GeneralFrm({
           <div className="mb-3 flex flex-column gap-2">
             <label htmlFor="countries">Fecha Requerida</label>
             <Calendar
-              value={requerimiento.DocDueDate}
+              value={requerimiento.STR_FEC_REQUER}
               readOnlyInput
               onChange={(e) => {
                 setRequerimiento((prevRequerimiento) => ({
                   ...requerimiento,
-                  DocDueDate: e.target.value,
+                  STR_FEC_REQUER: e.target.value,
                 }));
               }}
               //disabled
@@ -59,7 +59,7 @@ export function GeneralFrm({
             <label htmlFor="countries">Solicitante</label>
             <div className="card flex">
               <InputText
-                value={usuario.nombres + usuario.apellidos}
+                value={requerimiento.STR_USUARIO.name}
                 //onChange={handleChangeRazonSocial}
                 // onChange={(e) =>
                 //   setDocumento((prevDocumento) => ({
@@ -81,7 +81,7 @@ export function GeneralFrm({
             <label htmlFor="countries">Filial</label>
             <div className="card flex">
               <InputText
-                value={usuario.filial?.U_ST_NombreFilial}
+                value={requerimiento.STR_FILIAL?.U_ST_NombreFilial}
                 //onChange={handleChangeRazonSocial}
                 // onChange={(e) =>
                 //   setDocumento((prevDocumento) => ({
@@ -101,7 +101,7 @@ export function GeneralFrm({
             <label htmlFor="countries">Estado</label>
             <div className="card flex">
               <Dropdown
-                value={requerimiento.Estado}
+                value={requerimiento.STR_ESTADO}
                 onChange={(e) => {
                   //setCompExisteSunat(false);
                 }}
